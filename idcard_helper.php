@@ -9,16 +9,16 @@
  * @param stirng $IDCard 身份证号
  * @return Ambigous <string, NULL>
  */
-function getBrithday ($IDCard)
+function getBrithday ($idCard)
 {
-    if (strlen($IDCard) == 18) {
-        $birthday = substr($IDCard, 6, 4) . '-' .
-                 substr($IDCard, 10, 2) . '-' .
-                 substr($IDCard, 12, 2);
-    } elseif (strlen($IDCard) == 15) {
-        $birthday = "19" . substr($IDCard, 6, 2) . '-' .
-                 substr($IDCard, 8, 2) . '-' .
-                 substr($IDCard, 10, 2);
+    if (strlen($idCard) == 18) {
+        $birthday = substr($idCard, 6, 4) . '-' .
+                 substr($idCard, 10, 2) . '-' .
+                 substr($idCard, 12, 2);
+    } elseif (strlen($idCard) == 15) {
+        $birthday = "19" . substr($idCard, 6, 2) . '-' .
+                 substr($idCard, 8, 2) . '-' .
+                 substr($idCard, 10, 2);
     } else {
         $birthday = null;
     }
@@ -53,9 +53,9 @@ function getIDCard ($idCard)
     // 若是15位，则转换成18位；否则直接返回ID
     if (15 == strlen($idCard)) {
         
-        $W = array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2,1);
+        $w = array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2,1);
         
-        $A = array("1","0","X","9","8","7","6","5","4","3","2");
+        $a = array("1","0","X","9","8","7","6","5","4","3","2");
         
         $s = 0;
         
@@ -65,14 +65,11 @@ function getIDCard ($idCard)
         
         for ($i = 0; $i < $idCard18_len; $i ++) {
             
-            $s = $s + substr($idCard18, $i, 1) * $W[$i];
+            $s = $s + substr($idCard18, $i, 1) * $w[$i];
         }
         
-        $idCard18 .= $A[$s % 11];
-        
-        return $idCard18;
+        return $idCard18.$a[$s % 11];
     } else {
-        
         return $idCard;
     }
 }
