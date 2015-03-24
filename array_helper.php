@@ -38,8 +38,9 @@
 	 */
 	function index($array, $key)
 	{
-	    if(empty($array))
+	    if(empty($array)){
 	        return null;
+        }
 	    $result = [];
 	    foreach ($array as $element) {
 	        $value = $element[$key];
