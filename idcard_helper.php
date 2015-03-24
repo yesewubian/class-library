@@ -1,8 +1,12 @@
 <?php
 /**
- * 根据身份证号，自动返回生日
+ *身份证号处理函数
  * 
- * @param unknown $IDCard
+ */
+ 
+/**
+ * 功能：根据身份证号，自动返回生日
+ * @param stirng $IDCard 身份证号
  * @return Ambigous <string, NULL>
  */
 function getBrithday ($IDCard)
@@ -23,8 +27,7 @@ function getBrithday ($IDCard)
 }
 
 /**
- * 根据身份证号，自动返回性别
- * 
+ * 功能：根据身份证号，自动返回性别
  * @param   string    $cid   身份证号
  * @param   number    $comm  返回的性别类型 
  * @return  string    男/女 1/0
@@ -41,56 +44,18 @@ function getSex ($cid, $comm = 0)
 }
 
 /**
- *
- *
  * 功能：把15位身份证转换成18位
- *
  * @param string $idCard            
- *
  * @return newid or id
- *        
- *        
  */
 function getIDCard ($idCard)
 {
-    
     // 若是15位，则转换成18位；否则直接返回ID
     if (15 == strlen($idCard)) {
         
-        $W = array(
-                7,
-                9,
-                10,
-                5,
-                8,
-                4,
-                2,
-                1,
-                6,
-                3,
-                7,
-                9,
-                10,
-                5,
-                8,
-                4,
-                2,
-                1
-        );
+        $W = array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2,1);
         
-        $A = array(
-                "1",
-                "0",
-                "X",
-                "9",
-                "8",
-                "7",
-                "6",
-                "5",
-                "4",
-                "3",
-                "2"
-        );
+        $A = array("1","0","X","9","8","7","6","5","4","3","2");
         
         $s = 0;
         
