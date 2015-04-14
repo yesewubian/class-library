@@ -1,3 +1,1 @@
-# class-library
-class library
-我新建了一个分支，这是新分支的readme 文件内容
+这个仓库用来存放常用方法和类库，欢迎共享
