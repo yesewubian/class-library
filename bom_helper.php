@@ -2,7 +2,7 @@
 header('content-Type: text/html; charset=utf-8');
 $auto=0;/*设置为1标示检测BOM并去除，设置为0标示只进行BOM检测，不去除*/
 $basedir='.';
-$loop=true;//www.phpernote.com
+$loop=true;//www.dearmrli.com
 echo '当前查找的目录为：'.$basedir.'当前的设置是：';
 echo '（1）',$loop?'检查当前目录以及当前目录的子目录':'只针对当前目录进行检测';
 echo '（2）',$auto?'检测文件BOM同时去除检测到BOM文件的BOM<br />':'只检测文件BOM不执行去除BOM操作<br />';
