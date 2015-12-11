@@ -45,6 +45,7 @@ function curl_file_create($filename, $mimetype = '', $postname = '') {
  * curl 请求 
  */
 function curlrequest($url,$data,$method='post'){
+    //有次调用接口发现没有使用http_build_query时，接受到的post数据与设想的不同
     $fields_string = http_build_query ( $data, '&' );
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
