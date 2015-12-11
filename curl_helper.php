@@ -1,20 +1,20 @@
 <?php
 function actionUpload()
 {
-	if ($_POST) {
-		$url = Yii::$app->params['imageUploadPath'];
-		//
-		$path = $_SERVER['DOCUMENT_ROOT'];
-		/*
-		print_r($_FILES);
-		exit;
-		*/
-		//$filename = $path."/232.jpg";
-		//upload tmp
-		$tmpname = $_FILES['filedata']['name'];
-		$tmpfile = $_FILES['filedata']['tmp_name'];
-		$tmpType = $_FILES['filedata']['type'];
-		$fileType = Yii::$app->request->post('fileType');
+    if ($_POST) {
+        $url = Yii::$app->params['imageUploadPath'];
+        //
+        $path = $_SERVER['DOCUMENT_ROOT'];
+        /*
+        print_r($_FILES);
+        exit;
+        */
+        //$filename = $path."/232.jpg";
+        //upload tmp
+        $tmpname = $_FILES['filedata']['name'];
+        $tmpfile = $_FILES['filedata']['tmp_name'];
+        $tmpType = $_FILES['filedata']['type'];
+        $fileType = Yii::$app->request->post('fileType');
         $target=Yii::$app->params['imageUploadPath'];
         if (!function_exists('curl_file_create')) {
             $cfile = $this->curl_file_create($tmpfile,$tmpType,$tmpname);
@@ -32,7 +32,7 @@ function actionUpload()
         $r = curl_exec($curl);
         curl_close($curl);
         echo $r;exit;
-	}
+    }
 }
 
 function curl_file_create($filename, $mimetype = '', $postname = '') {
