@@ -35,6 +35,44 @@ function actionUpload()
     }
 }
 
+//版本兼容php5.5+  CURLFile
+function uploadPic($url,$postArr)
+{  
+    $filedata = array();
+    $num = count($_FILES);
+    if($num){
+        for ($i=0; $i < $num; $i++) { 
+            $key = 'image'.$i;
+            $tmpfile = $_FILES[$key]['tmp_name'];
+            // $tmptype = $_FILES[$key]['type'];
+            // $tmpname = $_FILES[$key]['name'];
+            // $filedata[$key] = curl_file_create($tmpfile,$tmptype,$tmpname);
+
+            if (class_exists('CURLFile')) {  
+                $field = new CURLFile($tmpfile);  
+            } else {  
+                $field = '@'.$tmpfile;  
+            }  
+            $filedata[$key] = $field;
+        }
+    }else{
+        return 0;
+    }
+
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url.'?'.http_build_query($postArr));
+    curl_setopt($curl, CURLOPT_USERAGENT,'Opera/9.80 (Windows NT 6.2; Win64; x64) Presto/2.12.388 Version/12.15');
+    curl_setopt($curl, CURLOPT_HTTPHEADER,array('User-Agent: Opera/9.80 (Windows NT 6.2; Win64; x64) Presto/2.12.388 Version/12.15','Referer: http://www.zhangtu.com','Content-Type: multipart/form-data'));
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // stop verifying certificate
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_POST, true); // enable posting
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $filedata); // post images
+    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true); // if any redirection after upload
+    $result = curl_exec($curl);
+    curl_close($curl);
+    return $result;
+}
+
 function curl_file_create($filename, $mimetype = '', $postname = '') {
     return "@$filename;filename="
     . ($postname ?: basename($filename))
@@ -45,7 +83,6 @@ function curl_file_create($filename, $mimetype = '', $postname = '') {
  * curl 请求 
  */
 function curlrequest($url,$data,$method='post'){
-    //有次调用接口发现没有使用http_build_query时，接受到的post数据与设想的不同
     $fields_string = http_build_query ( $data, '&' );
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
