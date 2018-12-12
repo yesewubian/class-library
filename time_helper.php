@@ -1,44 +1,156 @@
+<?php
 /**
- * 作用格式化时间戳返回友好格式的时间
- * @param string $time
- * @param number $type
- * @return NULL|string(刚刚、5分钟前、今天12:32、3月2日、2015年3月2日)
+ * Created by PhpStorm.
+ * User: 28981
+ * Date: 2018/4/11
+ * Time: 18:15
  */
-public function formatTime($time = null,$type = 1){
-	if(empty($time)){
-	    return null;exit;
-// 		    $time = time();
-	}
-	$return = date('Y-m-d',$time);
-	$c_year = date('Y',time());
-	
-	if($type == 0){
-	    return $return;
-	}elseif($type == 1){
-	    $year = date('Y',$time);
-		if($year == $c_year){
-			$return = date('m月d日',$time); //本年（ *月*日）
-			if(date('m',$time) == date('m',time())){
-			    $return = date('m月d日',$time); //月 （*日）
-			    if(date('d',$time) == date('d',time())){
-			        $return = date('今天 H:i',$time); //天 （今天 12:03）
-			        if(date('H',$time) == date('H',time())){				            
-			            $i = date('i',$time);
-			            $ii = date('i',time());
-			            $return = $ii-$i.'分钟前'; //小时 （今天 12:03）
-			            if(date('i',time()) - date('i',$time) < 3){
-			            	$return = '刚刚';
-			            }
-			        }
-			    }
-			}
-		}else{
-			$return = date('Y-m-d',$time);
-		}
-	}else{
-// 		    $return = 0;
-	}
-	return $return;
-	
-	
+
+/**
+ * 时期帮助函数
+ * Class TimeHelper
+ *
+ * @package lib\helper
+ */
+class TimeHelper {
+
+    /**
+     * 获取指定时间戳的当天开始日期和结束日期
+     * @param int $day 1524127134 时间戳
+     *
+     * @return array
+     */
+    public static function rangeOfDay(int $day = 0) {
+        if (!$day) {
+            $day = time();
+        }
+        $begin = mktime(0, 0, 0, date('m',$day), date('d',$day), date('Y',$day));
+        $end = mktime(23, 59, 59, date('m',$day), date('d',$day), date('Y',$day));
+        return [$begin,$end];
+    }
+
+    /**
+     * 获取指定月份的开始日期和结束日期时间戳
+     *
+     * @param int $year
+     * @param int $month
+     *
+     * @return array
+     */
+    public static function rangeOfMonth(int $year, int $month): array {
+        $begin = mktime(0, 0, 0, $month, 1, $year);
+        $end = mktime(23, 59, 59, $month, date('t', $begin), $year);
+        return [$begin, $end];
+    }
+
+    /**
+     * 获取指定年份的开始日期和结束日期时间戳
+     *
+     * @param int $year
+     *
+     * @return array
+     */
+    public static function rangeOfYear(int $year): array {
+        $begin = mktime(0, 0, 0, 1, 1, $year);
+        $end = mktime(23, 59, 59, 12, 31, $year);
+        return [$begin, $end];
+    }
+
+    /**
+     * 两个日期的相差天数
+     *
+     * @param string $day1 2018-03-01
+     * @param string $day2 2018-03-29
+     *
+     * @return int
+     */
+    public static function differenceDay(string $day1, string $day2): int {
+        return (int) ceil((strtotime($day2) - strtotime($day1)) / 86400); #相差天数
+    }
+
+    /**
+     * 返回当天的开时间戳
+     *
+     * @param int $time
+     *
+     * @return false|int
+     */
+    public static function startTimestampOfDay(int $time=0){
+        if(!$time){
+            $time = time();
+        }
+        return strtotime(date('Y-m-d',$time));
+    }
+
+    /**
+     * $time 需要格式化的时间戳
+     * return 格式化时间
+     * @param $time
+     * @return bool|string
+     */
+    public static function time_tran($time){
+
+        $text = '';
+
+        if(!$time){return $text;}
+
+        $current = time();
+
+        $t = $current - $time;
+
+        $retArr = array('刚刚','秒前','分钟前','小时前','天前','月前','年前');
+
+        switch($t){
+
+            case $t < 0://时间大于当前时间，返回格式化时间
+
+                $text = date('Y-m-d',$time);
+
+                break;
+
+            case $t == 0://刚刚
+
+                $text = $retArr[0];
+
+                break;
+
+            case $t < 60:// 几秒前
+
+                $text = $t.$retArr[1];
+
+                break;
+
+            case $t < 3600://几分钟前
+
+                $text = floor($t / 60).$retArr[2];
+
+                break;
+
+            case $t < 86400://几小时前
+
+                $text = floor($t / 3600).$retArr[3];
+
+                break;
+
+            case $t < 2592000: //几天前
+
+                $text = floor($t / 86400).$retArr[4];
+
+                break;
+
+            case $t < 31536000: //几个月前
+
+                $text = floor($t / 2592000).$retArr[5];
+
+                break;
+
+            default : //几年前
+
+                $text = floor($t / 31536000).$retArr[6];
+
+        }
+
+        return $text;
+
+    }
 }
